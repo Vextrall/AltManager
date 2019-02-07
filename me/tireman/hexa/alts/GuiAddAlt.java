@@ -1,5 +1,4 @@
-/* —«•´¨*•.¸¸.* ..::** Pyro client **::… *.¸¸.•*¨`•»— */
-	/* http://xordevs.xyz | XorClients © 2017 */
+
 package me.tireman.hexa.alts;
 
 import java.io.IOException;
