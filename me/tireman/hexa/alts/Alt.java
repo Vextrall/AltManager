@@ -1,6 +1,5 @@
-/* —«•´¨*•.¸¸.* ..::** Pyro client **::… *.¸¸.•*¨`•»— */
-	/* http://xordevs.xyz | XorClients © 2017 */
-package me.tireman.hexa.alts;
+
+ me.tireman.hexa.alts;
 
 public final class Alt {
     private String mask = "";
