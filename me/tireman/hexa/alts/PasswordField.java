@@ -7,6 +7,12 @@ import net.minecraft.client.*;
 import org.lwjgl.opengl.*;
 import net.minecraft.client.renderer.*;
 
+import net.minecraft.util.*;
+import net.minecraft.client.gui.*;
+import net.minecraft.client.*;
+import org.lwjgl.opengl.*;
+import net.minecraft.client.renderer.*;
+
 public class PasswordField extends Gui
 {
     private final FontRenderer fontRenderer;
@@ -21,12 +27,12 @@ public class PasswordField extends Gui
     private boolean canLoseFocus;
     public boolean isFocused;
     private boolean isEnabled;
-    private int field_73816_n;
+    private int i;
     private int cursorPosition;
     private int selectionEnd;
     private int enabledColor;
     private int disabledColor;
-    private boolean field_73823_s;
+    private boolean b;
     
     public PasswordField(final FontRenderer par1FontRenderer, final int par2, final int par3, final int par4, final int par5) {
         this.text = "";
@@ -35,12 +41,12 @@ public class PasswordField extends Gui
         this.canLoseFocus = true;
         this.isFocused = false;
         this.isEnabled = true;
-        this.field_73816_n = 0;
+        this.i = 0;
         this.cursorPosition = 0;
         this.selectionEnd = 0;
         this.enabledColor = 14737632;
         this.disabledColor = 7368816;
-        this.field_73823_s = true;
+        this.b = true;
         this.fontRenderer = par1FontRenderer;
         this.xPos = par2;
         this.yPos = par3;
@@ -96,7 +102,7 @@ public class PasswordField extends Gui
             var2 = String.valueOf(String.valueOf(var2)) + this.text.substring(var5);
         }
         this.text = var2.replaceAll(" ", "");
-        this.func_73784_d(var4 - this.selectionEnd + var8);
+        this.cursorPos(var4 - this.selectionEnd + var8);
     }
     
     public void func_73779_a(final int par1) {
@@ -128,7 +134,7 @@ public class PasswordField extends Gui
                 }
                 this.text = var5;
                 if (var2) {
-                    this.func_73784_d(par1);
+                    this.cursorPos(par1);
                 }
             }
         }
@@ -139,10 +145,10 @@ public class PasswordField extends Gui
     }
     
     public int getNthWordFromPos(final int par1, final int par2) {
-        return this.func_73798_a(par1, this.getCursorPosition(), true);
+        return this.type(par1, this.getCursorPosition(), true);
     }
     
-    public int func_73798_a(final int par1, final int par2, final boolean par3) {
+    public int type(final int par1, final int par2, final boolean par3) {
         int var4 = par2;
         final boolean var5 = par1 < 0;
         for (int var6 = Math.abs(par1), var7 = 0; var7 < var6; ++var7) {
@@ -182,7 +188,7 @@ public class PasswordField extends Gui
         return var4;
     }
     
-    public void func_73784_d(final int par1) {
+    public void cursorPos(final int par1) {
         this.setCursorPosition(this.selectionEnd + par1);
     }
     
@@ -262,7 +268,7 @@ public class PasswordField extends Gui
                             this.setCursorPosition(this.getNthWordFromCursor(-1));
                         }
                         else {
-                            this.func_73784_d(-1);
+                            this.cursorPos(-1);
                         }
                         return true;
                     }
@@ -279,7 +285,7 @@ public class PasswordField extends Gui
                             this.setCursorPosition(this.getNthWordFromCursor(1));
                         }
                         else {
-                            this.func_73784_d(1);
+                            this.cursorPos(1);
                         }
                         return true;
                     }
@@ -323,8 +329,8 @@ public class PasswordField extends Gui
             if (this.enableBackgroundDrawing) {
                 var5 -= 4;
             }
-            final String var6 = this.fontRenderer.trimStringToWidth(this.text.substring(this.field_73816_n), this.getWidth());
-            this.setCursorPosition(this.fontRenderer.trimStringToWidth(var6, var5).length() + this.field_73816_n);
+            final String var6 = this.fontRenderer.trimStringToWidth(this.text.substring(this.i), this.getWidth());
+            this.setCursorPosition(this.fontRenderer.trimStringToWidth(var6, var5).length() + this.i);
         }
     }
     
@@ -335,9 +341,9 @@ public class PasswordField extends Gui
                 Gui.drawRect(this.xPos, this.yPos, this.xPos + this.width, this.yPos + this.height, -16777216);
             }
             final int var1 = this.isEnabled ? this.enabledColor : this.disabledColor;
-            final int var2 = this.cursorPosition - this.field_73816_n;
-            int var3 = this.selectionEnd - this.field_73816_n;
-            final String var4 = this.fontRenderer.trimStringToWidth(this.text.substring(this.field_73816_n), this.getWidth());
+            final int var2 = this.cursorPosition - this.i;
+            int var3 = this.selectionEnd - this.i;
+            final String var4 = this.fontRenderer.trimStringToWidth(this.text.substring(this.i), this.getWidth());
             final boolean var5 = var2 >= 0 && var2 <= var4.length();
             final boolean var6 = this.isFocused && this.cursorCounter / 6 % 2 == 0 && var5;
             final int var7 = this.enableBackgroundDrawing ? (this.xPos + 4) : this.xPos;
@@ -350,7 +356,7 @@ public class PasswordField extends Gui
                 if (var5) {
                     var4.substring(0, var2);
                 }
-                var9 = Minecraft.getMinecraft().fontRendererObj.func_175063_a(this.text.replaceAll("(?s).", "*"), var7, var8, var1);
+                var9 = Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(this.text.replaceAll("(?s).", "*"), var7, var8, var1);
             }
             final boolean var10 = this.cursorPosition < this.text.length() || this.text.length() >= this.getMaxStringLength();
             int var11 = var9;
@@ -362,14 +368,14 @@ public class PasswordField extends Gui
                 --var9;
             }
             if (var4.length() > 0 && var5 && var2 < var4.length()) {
-                Minecraft.getMinecraft().fontRendererObj.func_175063_a(var4.substring(var2), var9, var8, var1);
+                Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(var4.substring(var2), var9, var8, var1);
             }
             if (var6) {
                 if (var10) {
                     Gui.drawRect(var11, var8 - 1, var11 + 1, var8 + 1 + this.fontRenderer.FONT_HEIGHT, -3092272);
                 }
                 else {
-                    Minecraft.getMinecraft().fontRendererObj.func_175063_a("_", var11, var8, var1);
+                    Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow("_", var11, var8, var1);
                 }
             }
             if (var3 != var2) {
@@ -396,12 +402,12 @@ public class PasswordField extends Gui
         GL11.glDisable(3553);
         GL11.glEnable(3058);
         GL11.glLogicOp(5387);
-        var7.startDrawingQuads();
-        var7.addVertex(par1, par4, 0.0);
-        var7.addVertex(par3, par4, 0.0);
-        var7.addVertex(par3, par2, 0.0);
-        var7.addVertex(par1, par2, 0.0);
-        var7.draw();
+        var7.begin(7, var7.getVertexFormat());
+        var7.pos(par1, par4, 0.0);
+        var7.pos(par3, par4, 0.0);
+        var7.pos(par3, par2, 0.0);
+        var7.pos(par1, par2, 0.0);
+        var7.finishDrawing();
         GL11.glDisable(3058);
         GL11.glEnable(3553);
     }
@@ -462,26 +468,26 @@ public class PasswordField extends Gui
         }
         this.selectionEnd = par1;
         if (this.fontRenderer != null) {
-            if (this.field_73816_n > var2) {
-                this.field_73816_n = var2;
+            if (this.i > var2) {
+                this.i = var2;
             }
             final int var3 = this.getWidth();
-            final String var4 = this.fontRenderer.trimStringToWidth(this.text.substring(this.field_73816_n), var3);
-            final int var5 = var4.length() + this.field_73816_n;
-            if (par1 == this.field_73816_n) {
-                this.field_73816_n -= this.fontRenderer.trimStringToWidth(this.text, var3, true).length();
+            final String var4 = this.fontRenderer.trimStringToWidth(this.text.substring(this.i), var3);
+            final int var5 = var4.length() + this.i;
+            if (par1 == this.i) {
+                this.i -= this.fontRenderer.trimStringToWidth(this.text, var3, true).length();
             }
             if (par1 > var5) {
-                this.field_73816_n += par1 - var5;
+                this.i += par1 - var5;
             }
-            else if (par1 <= this.field_73816_n) {
-                this.field_73816_n -= this.field_73816_n - par1;
+            else if (par1 <= this.i) {
+                this.i -= this.i - par1;
             }
-            if (this.field_73816_n < 0) {
-                this.field_73816_n = 0;
+            if (this.i < 0) {
+                this.i = 0;
             }
-            if (this.field_73816_n > var2) {
-                this.field_73816_n = var2;
+            if (this.i > var2) {
+                this.i = var2;
             }
         }
     }
@@ -491,10 +497,10 @@ public class PasswordField extends Gui
     }
     
     public boolean func_73778_q() {
-        return this.field_73823_s;
+        return this.b;
     }
     
     public void func_73790_e(final boolean par1) {
-        this.field_73823_s = par1;
+        this.b = par1;
     }
 }
