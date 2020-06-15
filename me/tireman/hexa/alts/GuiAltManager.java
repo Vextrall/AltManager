@@ -8,7 +8,6 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import me.tireman.hexa.Hexa;
-import me.tireman.hexa.utils.RenderUtils;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -99,7 +98,7 @@ extends GuiScreen {
        
         this.drawCenteredString(fontRendererObj, sb2.append(AltManager.registry.size()).append(" alts").toString(), width / 2, 10, -1);
         this.drawCenteredString(this.fontRendererObj, this.loginThread == null ? this.status : this.loginThread.getStatus(), width / 2, 20, -1);
-        RenderUtils.drawBorderedRect(50.0f, 33.0f, width - 50, height - 50, 1.0f, -16777216, Integer.MIN_VALUE);
+        Gui.drawRect(50.0f, 33.0f, width - 50, height - 50, -16777216);
         GL11.glPushMatrix();
         this.prepareScissorBox(0.0f, 33.0f, width, height - 50);
         GL11.glEnable(3089);
@@ -111,16 +110,16 @@ extends GuiScreen {
             String pass = alt2.getPassword().equals("") ? "\u00a7cCracked" : alt2.getPassword().replaceAll(".", "*");
             if (alt2 == this.selectedAlt) {
                 if (this.isMouseOverAlt(par1, par2, y2 - this.offset) && Mouse.isButtonDown(0)) {
-                    RenderUtils.drawBorderedRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, 1.0f, -16777216, -2142943931);
+                    Gui.drawRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, -2142943931);
                 } else if (this.isMouseOverAlt(par1, par2, y2 - this.offset)) {
-                    RenderUtils.drawBorderedRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, 1.0f, -16777216, -2142088622);
+                    Gui.drawRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, -2142088622);
                 } else {
-                    RenderUtils.drawBorderedRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, 1.0f, -16777216, -2144259791);
+                    Gui.drawRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, -2144259791);
                 }
             } else if (this.isMouseOverAlt(par1, par2, y2 - this.offset) && Mouse.isButtonDown(0)) {
-                RenderUtils.drawBorderedRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, 1.0f, -16777216, -2146101995);
+                Gui.drawRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, 1.0f, -16777216, -2146101995);
             } else if (this.isMouseOverAlt(par1, par2, y2 - this.offset)) {
-                RenderUtils.drawBorderedRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, 1.0f, -16777216, -2145180893);
+                Gui.drawRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, 1.0f, -16777216, -2145180893);
             }
             this.drawCenteredString(this.fontRendererObj, name, width / 2, y2 - this.offset, -1);
             this.drawCenteredString(this.fontRendererObj, pass, width / 2, y2 - this.offset + 10, 5592405);
