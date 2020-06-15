@@ -53,7 +53,7 @@ extends GuiScreen {
                 if (this.loginThread != null) {
                     this.loginThread = null;
                 }
-                AltManager altManager = Hexa.theClient.altManager;
+                AltManager altManager = YourClient.instance.altManager;
                 AltManager.registry.remove(this.selectedAlt);
                 this.status = "\u00a7aRemoved.";
                 this.selectedAlt = null;
@@ -104,7 +104,7 @@ extends GuiScreen {
         this.prepareScissorBox(0.0f, 33.0f, width, height - 50);
         GL11.glEnable(3089);
         int y2 = 38;
-        AltManager altManager2 =Hexa.theClient.altManager;
+        AltManager altManager2 = YourClient.instance.altManager;
         for (Alt alt2 : AltManager.registry) {
             if (!this.isAltInArea(y2)) continue;
             String name = alt2.getMask().equals("") ? alt2.getUsername() : alt2.getMask();
@@ -187,7 +187,7 @@ extends GuiScreen {
             this.offset = 0;
         }
         int y2 = 38 - this.offset;
-        AltManager altManager = Hexa.theClient.altManager;
+        AltManager altManager = YourClient.instance.altManager;
         for (Alt alt2 : AltManager.registry) {
             if (this.isMouseOverAlt(par1, par2, y2)) {
                 if (alt2 == this.selectedAlt) {
