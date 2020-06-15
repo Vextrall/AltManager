@@ -8,11 +8,9 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import me.tireman.hexa.Hexa;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.*;
 import net.minecraft.util.EnumChatFormatting;
+import com.thealtening.auth.TheAlteningAuthentication;
 
 
 
@@ -25,6 +23,7 @@ extends GuiScreen {
     private int offset;
     public Alt selectedAlt = null;
     private String status = (Object)((Object)EnumChatFormatting.GRAY) + "No alts selected";
+    private TheAlteningAuthentication serviceSwitcher = TheAlteningAuthentication.mojang();
 
     @Override
     public void actionPerformed(GuiButton button) throws IOException {
@@ -69,6 +68,16 @@ extends GuiScreen {
             
             case 6: {
                 this.mc.displayGuiScreen(new GuiRenameAlt(this));
+                break;
+            }
+                
+            case 7: {
+                serviceSwitch.updateService(AlteningServiceType.MOJANG);
+                break;
+            }
+                
+            case 8: {
+                serviceSwitch.updateService(AlteningServiceType.THEALTENING);
                 break;
             }
            
@@ -161,6 +170,8 @@ extends GuiScreen {
         this.buttonList.add(new GuiButton(4, width / 2 - 50, height - 48, 100, 20, "Direct Login"));
         this.rename = new GuiButton(6, width / 2 - 50, height - 24, 100, 20, "Edit");
         this.buttonList.add(this.rename);
+        this.buttonList.add(new GuiButton(7, width - 100, 0, 100, 20, "Use Mojang"));
+        this.buttonList.add(new GuiButton(8, width - 200, 0, 100, 20, "Use TheAltening"));
         this.login.enabled = false;
         this.remove.enabled = false;
         this.rename.enabled = false;
