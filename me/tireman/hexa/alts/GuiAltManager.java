@@ -7,12 +7,9 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import me.tireman.hexa.Hexa;
 import net.minecraft.client.gui.*;
 import net.minecraft.util.EnumChatFormatting;
 import com.thealtening.auth.TheAlteningAuthentication;
-
-
 
 public class GuiAltManager
 extends GuiScreen {
