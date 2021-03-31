@@ -1,7 +1,6 @@
 
 package me.tireman.hexa.alts;
 
-
 import java.io.IOException;
 import java.util.List;
 

@@ -7,15 +7,9 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import me.tireman.hexa.Hexa;
-import me.tireman.hexa.utils.RenderUtils;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.*;
 import net.minecraft.util.EnumChatFormatting;
-
-
+import com.thealtening.auth.TheAlteningAuthentication;
 
 public class GuiAltManager
 extends GuiScreen {
@@ -26,6 +20,7 @@ extends GuiScreen {
     private int offset;
     public Alt selectedAlt = null;
     private String status = (Object)((Object)EnumChatFormatting.GRAY) + "No alts selected";
+    private TheAlteningAuthentication serviceSwitcher = TheAlteningAuthentication.mojang();
 
     @Override
     public void actionPerformed(GuiButton button) throws IOException {
@@ -53,7 +48,7 @@ extends GuiScreen {
                 if (this.loginThread != null) {
                     this.loginThread = null;
                 }
-                AltManager altManager = Hexa.theClient.altManager;
+                AltManager altManager = YourClient.instance.altManager;
                 AltManager.registry.remove(this.selectedAlt);
                 this.status = "\u00a7aRemoved.";
                 this.selectedAlt = null;
@@ -70,6 +65,16 @@ extends GuiScreen {
             
             case 6: {
                 this.mc.displayGuiScreen(new GuiRenameAlt(this));
+                break;
+            }
+                
+            case 7: {
+                serviceSwitch.updateService(AlteningServiceType.MOJANG);
+                break;
+            }
+                
+            case 8: {
+                serviceSwitch.updateService(AlteningServiceType.THEALTENING);
                 break;
             }
            
@@ -99,28 +104,28 @@ extends GuiScreen {
        
         this.drawCenteredString(fontRendererObj, sb2.append(AltManager.registry.size()).append(" alts").toString(), width / 2, 10, -1);
         this.drawCenteredString(this.fontRendererObj, this.loginThread == null ? this.status : this.loginThread.getStatus(), width / 2, 20, -1);
-        RenderUtils.drawBorderedRect(50.0f, 33.0f, width - 50, height - 50, 1.0f, -16777216, Integer.MIN_VALUE);
+        Gui.drawRect(50.0f, 33.0f, width - 50, height - 50, -16777216);
         GL11.glPushMatrix();
         this.prepareScissorBox(0.0f, 33.0f, width, height - 50);
         GL11.glEnable(3089);
         int y2 = 38;
-        AltManager altManager2 =Hexa.theClient.altManager;
+        AltManager altManager2 = YourClient.instance.altManager;
         for (Alt alt2 : AltManager.registry) {
             if (!this.isAltInArea(y2)) continue;
             String name = alt2.getMask().equals("") ? alt2.getUsername() : alt2.getMask();
             String pass = alt2.getPassword().equals("") ? "\u00a7cCracked" : alt2.getPassword().replaceAll(".", "*");
             if (alt2 == this.selectedAlt) {
                 if (this.isMouseOverAlt(par1, par2, y2 - this.offset) && Mouse.isButtonDown(0)) {
-                    RenderUtils.drawBorderedRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, 1.0f, -16777216, -2142943931);
+                    Gui.drawRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, -2142943931);
                 } else if (this.isMouseOverAlt(par1, par2, y2 - this.offset)) {
-                    RenderUtils.drawBorderedRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, 1.0f, -16777216, -2142088622);
+                    Gui.drawRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, -2142088622);
                 } else {
-                    RenderUtils.drawBorderedRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, 1.0f, -16777216, -2144259791);
+                    Gui.drawRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, -2144259791);
                 }
             } else if (this.isMouseOverAlt(par1, par2, y2 - this.offset) && Mouse.isButtonDown(0)) {
-                RenderUtils.drawBorderedRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, 1.0f, -16777216, -2146101995);
+                Gui.drawRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, 1.0f, -16777216, -2146101995);
             } else if (this.isMouseOverAlt(par1, par2, y2 - this.offset)) {
-                RenderUtils.drawBorderedRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, 1.0f, -16777216, -2145180893);
+                Gui.drawRect(52.0f, y2 - this.offset - 4, width - 52, y2 - this.offset + 20, 1.0f, -16777216, -2145180893);
             }
             this.drawCenteredString(this.fontRendererObj, name, width / 2, y2 - this.offset, -1);
             this.drawCenteredString(this.fontRendererObj, pass, width / 2, y2 - this.offset + 10, 5592405);
@@ -162,6 +167,8 @@ extends GuiScreen {
         this.buttonList.add(new GuiButton(4, width / 2 - 50, height - 48, 100, 20, "Direct Login"));
         this.rename = new GuiButton(6, width / 2 - 50, height - 24, 100, 20, "Edit");
         this.buttonList.add(this.rename);
+        this.buttonList.add(new GuiButton(7, width - 100, 0, 100, 20, "Use Mojang"));
+        this.buttonList.add(new GuiButton(8, width - 200, 0, 100, 20, "Use TheAltening"));
         this.login.enabled = false;
         this.remove.enabled = false;
         this.rename.enabled = false;
@@ -187,7 +194,7 @@ extends GuiScreen {
             this.offset = 0;
         }
         int y2 = 38 - this.offset;
-        AltManager altManager = Hexa.theClient.altManager;
+        AltManager altManager = YourClient.instance.altManager;
         for (Alt alt2 : AltManager.registry) {
             if (this.isMouseOverAlt(par1, par2, y2)) {
                 if (alt2 == this.selectedAlt) {
